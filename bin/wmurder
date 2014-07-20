@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+dst="${lxcroot}/$1"
+if [ -d ${dst} ]; then
+  lxc-stop --name $1
+  lxc-destry --name $1 && echo "Destroy successful" || faillog "Destroy failed" 1
+else
+  faillog "No such container found"
+fi
