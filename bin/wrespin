@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+source bin/const
+
+dst="${lxcroot}/$1"
+if [ -d ${dst} ]; then
+  template=`grep 'Template used' ${lxcroot}/$1/config | cut -d':' -f 2 | cut -d'-' -f 2`
+  lxc-stop --name $1
+  lxc-destroy --name $1 && echo "Destroy complete" || (echo "Destroy failed" && exit 1 )
+fi
+
+(
+  lxc-create -t $template --name $1 && echo "Create successful" || faillog "Create failure" 2
+  lxc-start -d --name $1 && echo "Started" || faillog "Start failure" 3
+)
+
+if [ $# -eq 2 ]; then lxc-attach --name $1; fi
