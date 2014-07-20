@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+lxc-start -d --name $1
